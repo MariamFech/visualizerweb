@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Decision Tree",
+  "type": "object",
+  "required": [
+    "mlAlgoName",
+    "mlAlgoOptions",
+    "points",
+    "predictionData"
+  ],
+  "properties": {
+    "mlAlgoName": {
+      "type": "string",
+      "pattern": "Decision Tree"
+    },
+    "mlAlgoOptions": {
+      "type": "object",
+      "required": [
+        "Depth"
+      ],
+      "properties": {
+        "Depth": {
+          "default": 2,
+          "minimum": 1,
+          "maximum": 20
+        }
+      }
+    },
+    "points": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "x",
+          "y",
+          "strokeColor"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "p[0-9]+"
+          },
+          "x": {
+            "type": "integer"
+          },
+          "y": {
+            "type": "integer"
+          },
+          "strokeColor": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "predictionData": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "x",
+          "y"
+        ],
+        "properties": {
+          "x": {
+            "type": "integer"
+          },
+          "y": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}

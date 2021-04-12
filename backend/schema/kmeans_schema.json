@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "K-Means",
+  "type": "object",
+  "required": [
+    "mlAlgoName",
+    "mlAlgoOptions",
+    "points",
+    "predictionData"
+  ],
+  "properties": {
+    "mlAlgoName": {
+      "type": "string",
+      "pattern": "K-Means"
+    },
+    "mlAlgoOptions": {
+      "type": "object",
+      "required": [
+        "Cluster",
+        "Iterations",
+        "Centroid Seeds"
+      ],
+      "properties": {
+        "Cluster": {
+          "default": 2,
+          "minimum": 1,
+          "maximum": 20
+        },
+        "Iterations": {
+          "type": "integer",
+          "default": 300,
+          "minimum": 20,
+          "maximum": 300
+        },
+        "Centroid Seeds": {
+          "type": "integer",
+          "default": 4,
+          "minimum": 1,
+          "maximum": 30
+        }
+      }
+    },
+    "points": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "x",
+          "y",
+          "strokeColor"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "p[0-9]+"
+          },
+          "x": {
+            "type": "integer"
+          },
+          "y": {
+            "type": "integer"
+          },
+          "strokeColor": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "predictionData": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "x",
+          "y"
+        ],
+        "properties": {
+          "x": {
+            "type": "integer"
+          },
+          "y": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}

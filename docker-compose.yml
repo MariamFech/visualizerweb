@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+  visualizerweb-frontend:
+    image: visualizerweb-frontend
+    build:
+      context: ./frontend
+    ports: 
+      - "4000:80"
+    depends_on:
+      - visualizerweb-backend
+  visualizerweb-backend:
+    image: visualizerweb-backend
+    build:
+      context: ./backend
+    ports:
+      - "4001:4000"
+  
