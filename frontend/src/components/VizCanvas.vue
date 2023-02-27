@@ -64,7 +64,7 @@ export default {
         }
       })
 
-      // vars
+      // mouse moves
       let drag = false
 
       // get data from vuex store
@@ -78,6 +78,9 @@ export default {
 
       const point = svg.append('g')
         .attr('class', 'points')
+
+      const regression = svg.append('g')
+        .attr('class', 'regression')
 
       // event listener for painting on the Point layer
       vizCanvas.addEventListener('mousedown', ev => { getData(ev) }, { passive: true })
@@ -244,6 +247,7 @@ export default {
           })
           removeVoronoi()
           removeAllPoints()
+          removeRegressionLine()
           $store.commit('vizcanvas/clearHistory')
           $store.commit('vizcanvas/clearPoints')
         }
@@ -265,19 +269,59 @@ export default {
 
       /**
        * process the response from the server
+       * show results
        * @param response
        */
       function processResponse (response) {
         if (response !== null) {
-          predictionData = undefined
-          if (response.prediction !== undefined) {
-            predictionData = processPredictionData(response.prediction)
-          }
-          colorizePoints(response)
-          if (showVoronoi && response.value !== null && predictionData !== undefined) {
-            renderVoronoi(predictionData)
+          if (response.specific === 'Linear Regression' || response.specific === 'Regression Tree') {
+            removeRegressionLine()
+            paintRegressionLine(response)
+          } else {
+            predictionData = undefined
+            if (response.prediction !== undefined) {
+              predictionData = processPredictionData(response.prediction)
+            }
+            colorizePoints(response)
+            if (showVoronoi && response.value !== null && predictionData !== undefined) {
+              renderVoronoi(predictionData)
+            }
           }
         }
+      }
+      /**
+       * Paint the Regression Line
+       * @param pd prediction data
+       * @returns {[]} Json with {x,y,label}
+       */
+      function paintRegressionLine (pd) {
+        const points = getPoints(pd)
+        let curveShape = d3.curveStepAfter
+        if (pd.specific === 'Linear Regression') {
+          curveShape = d3.curveNatural
+        }
+        regression.append('path')
+          .attr('d', d3.line()
+            .x(d => d.x)
+            .y(d => d.y)
+            .curve(curveShape)(points))
+          .attr('fill', 'none')
+          .attr('stroke', 'steelblue')
+          .attr('stroke-width', 2)
+      }
+
+      function getPoints (pd) {
+        const xVals = pd.labels[0]
+        const yVals = pd.labels[1]
+        const points = []
+        for (let i = 0; i < xVals.length; i++) {
+          points.push({ x: xVals[i], y: yVals[i] })
+        }
+        return points
+      }
+
+      function removeRegressionLine () {
+        regression.selectAll('path').remove()
       }
 
       /**

@@ -4,7 +4,7 @@ import json
 import jsonschema
 from jsonschema import validate
 
-ALGONAMES = ["K-Means", "Hierarchical", "Decision Tree", "Nearest Neighbors", "SVM"]
+ALGONAMES = ["K-Means", "Hierarchical", "Decision Tree", "Nearest Neighbors", "SVM", "Linear Regression", "Regression Tree"]
 
 
 def get_schema(name):
@@ -19,10 +19,14 @@ def get_schema(name):
         algo = 'nearest_neighbors'
     if name == ALGONAMES[4]:
         algo = 'svm'
-
+    if name == ALGONAMES[5]:
+        algo = 'linear_regression'
+    if name == ALGONAMES[6]:
+        algo = 'regression_tree'
     schema_path = "schema/" + algo + "_schema.json"
     with open(schema_path, 'r') as file:
         schema = json.load(file)
+    print('schema_path', schema_path)
     return schema
 
 

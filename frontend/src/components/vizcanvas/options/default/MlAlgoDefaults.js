@@ -42,3 +42,19 @@ export function suvm () {
     }
   }
 }
+export function regressionTree () {
+  return {
+    mlAlgoName: 'Regression Tree',
+    mlAlgoOptions: {
+      Depth: 1
+    }
+  }
+}
+export function linearRegression () {
+  return {
+    mlAlgoName: 'Linear Regression',
+    mlAlgoOptions: {
+      Degree: 1
+    }
+  }
+}

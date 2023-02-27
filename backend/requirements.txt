@@ -8,10 +8,10 @@ Jinja2==2.11.3
 joblib==1.0.0
 jsonschema==3.2.0
 MarkupSafe==1.1.1
-numpy==1.20.1
+numpy==1.23.0
 pyrsistent==0.17.3
-scikit-learn==0.24.1
-scipy==1.6.0
+scikit-learn==1.1.1
+scipy==1.9.3
 six==1.15.0
 threadpoolctl==2.1.0
 Werkzeug==1.0.1

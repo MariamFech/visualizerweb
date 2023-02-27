@@ -11,6 +11,7 @@
     >
       <q-tab name="clustering" label="Clustering"/>
       <q-tab name="classification" label="Classification"/>
+      <q-tab name="regression" label="Regression"/>
     </q-tabs>
 
     <q-separator/>
@@ -114,6 +115,50 @@
           </template>
         </q-splitter>
       </q-tab-panel>
+
+      <q-tab-panel name="regression" class="q-pa-none">
+
+        <q-splitter
+          v-model="splitterModel"
+          style="height: 250px"
+        >
+          <template v-slot:before>
+            <q-tabs
+              v-model="tabs.regressionTab"
+              vertical
+              no-caps
+              class="text-blue-grey-4"
+              active-color="blue-grey"
+              >
+              <q-tab name="linear" label="Linear Regression"/>
+              <q-tab name="tree" label="Regression Tree"/>
+            </q-tabs>
+          </template>
+
+          <template v-slot:after>
+            <q-tab-panels
+              v-model="tabs.regressionTab"
+              animated
+              transition-prev="slide-down"
+              transition-next="slide-up"
+            >
+              <q-tab-panel name="linear">
+                <LinearRegression @mlAlgoData="mlAlgoData"
+                                  :currentAlgoData="currentAlgoData"
+                                  :dflf="dflf.linearRegression()"
+                ></LinearRegression>
+              </q-tab-panel>
+
+              <q-tab-panel name="tree">
+                <RegressionTree @mlAlgoData="mlAlgoData"
+                                :currentAlgoData="currentAlgoData"
+                                :dflf="dflf.regressionTree()"
+                ></RegressionTree>
+              </q-tab-panel>
+            </q-tab-panels>
+          </template>
+        </q-splitter>
+      </q-tab-panel>
     </q-tab-panels>
     <q-separator/>
     <div class="q-pa-sm float-right">
@@ -137,6 +182,8 @@ import Hierarchical from './clustering/Hierarchical'
 import NearestNeighbors from './classification/NearestNeighbors'
 import Svm from './classification/Svm'
 import DecisionTree from './classification/DecisionTree'
+import LinearRegression from './regression/LinearRegression'
+import RegressionTree from './regression/RegressionTree'
 import * as dflf from './default/MlAlgoDefaults'
 import { ref } from 'vue'
 
@@ -147,7 +194,9 @@ export default {
     Hierarchical,
     NearestNeighbors,
     Svm,
-    DecisionTree
+    DecisionTree,
+    LinearRegression,
+    RegressionTree
   },
   props: ['currentTabs', 'currentAlgoData'],
   methods: {
@@ -172,6 +221,12 @@ export default {
           } else if (this.tabs.classificationTab === 'decision') {
             mad = this.dflf.decisionTree()
           }
+        } else if (this.tabs.mainTab === 'regression') {
+          if (this.tabs.regressionTab === 'linear') {
+            mad = this.dflf.linearRegression()
+          } else if (this.tabs.regressionTab === 'tree') {
+            mad = this.dflf.regressionTree()
+          }
         }
       }
       this.$emit('mlAlgoData', mad)
@@ -179,7 +234,8 @@ export default {
       this.$emit('lastTab', {
         mainTab: this.tabs.mainTab,
         clusteringTab: this.tabs.clusteringTab,
-        classificationTab: this.tabs.classificationTab
+        classificationTab: this.tabs.classificationTab,
+        regressionTab: this.tabs.regressionTab
       })
     }
   },
@@ -189,7 +245,8 @@ export default {
     const tabs = ref({
       mainTab: props.currentTabs.mainTab,
       clusteringTab: props.currentTabs.clusteringTab,
-      classificationTab: props.currentTabs.classificationTab
+      classificationTab: props.currentTabs.classificationTab,
+      regressionTab: props.currentTabs.regressionTab
     })
 
     return {

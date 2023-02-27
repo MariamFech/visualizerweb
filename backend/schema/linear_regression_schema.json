@@ -1,0 +1,76 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Linear Regression",
+    "type": "object",
+    "required": [
+        "mlAlgoName",
+        "mlAlgoOptions",
+        "points",
+        "predictionData"
+    ],
+    "properties": {
+        "mlAlgoName": {
+            "type": "string",
+            "pattern": "Linear Regression"
+        },
+        "mlAlgoOptions": {
+            "type": "object",
+            "required": [
+                "Degree"
+            ],
+            "properties": {
+                "Degree": {
+                    "default": 1,
+                    "minimum": 1,
+                    "maximum": 5
+                }
+            }
+        },
+        "points": {
+            "type": "array",
+            "default": [],
+            "items": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "x",
+                    "y",
+                    "strokeColor"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "pattern": "p[0-9]+"
+                    },
+                    "x": {
+                        "type": "integer"
+                    },
+                    "y": {
+                        "type": "integer"
+                    },
+                    "strokeColor": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "predictionData": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "x",
+                    "y"
+                ],
+                "properties": {
+                    "x": {
+                        "type": "integer"
+                    },
+                    "y": {
+                        "type": "integer"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,62 +1,29 @@
 <template>
   <q-page-sticky position="top-left" :offset="[5, 5]">
-    <q-btn
-      text-color="blue-grey-15"
-      class="q-card--bordered"
-      style="background-color: rgba(236, 239, 241, 0.9) "
-      size="md"
-      unelevated
-      square
-      no-caps
-      padding="xs sm"
-      @click="prompt = true"
-    >
+    <q-btn text-color="blue-grey-15" class="q-card--bordered" style="background-color: rgba(236, 239, 241, 0.9) "
+      size="md" unelevated square no-caps padding="xs sm" @click="prompt = true">
       <strong>{{ mlAlgoName }}:&nbsp;</strong>
       {{ mlAlgoOptions }}
     </q-btn>
   </q-page-sticky>
   <q-page-sticky position="top-right" :offset="[5, 5]">
     <div class="column items-center">
-      <q-btn
-        class="col"
-        :loading="loading"
-        @click="requestData"
-        style="margin-bottom: 5px"
-        v-model="run"
-        :icon="laPlaySolid"
-        square
-        unelevated
-        :disable="disableBtn"
-        label-position="left"
-        color="green"
-        direction="right"
-        padding="xs"
-      />
+      <q-btn class="col" :loading="loading" @click="requestData" style="margin-bottom: 5px" v-model="run"
+        :icon="laPlaySolid" square unelevated :disable="disableBtn" label-position="left" color="green" direction="right"
+        padding="xs" />
 
       <q-btn
-        :style="`${clickedButtons.voronoi ? 'background-color: rgba(244, 144, 55, 0.7) !important' : 'background-color: rgba(238, 219, 203, 0.7) !important' }` "
-        v-model="voronoi"
-        label="&nbsp;V&nbsp;"
-        unelevated
-        :outline="!clickedButtons.voronoi"
-        :disable="disableBtn"
-        color="yellow-10"
-        direction="right"
-        padding="xs sm"
-        @click="voronoiBtn"
-      />
+        :style="`${clickedButtons.voronoi ? 'background-color: rgba(244, 144, 55, 0.7) !important' : 'background-color: rgba(238, 219, 203, 0.7) !important'}`"
+        v-model="voronoi" label="&nbsp;V&nbsp;" unelevated :outline="!clickedButtons.voronoi" :disable="disableVBtn"
+        :color="`${disableVBtn ? 'primary' : 'yellow-10'}`" direction="right" padding="xs sm" @click="voronoiBtn" />
     </div>
     <q-dialog v-model="prompt">
       <q-card>
-        <OptionContent
-          @mlAlgoData="mlAlgoData"
-          @lastTab="lastTab"
-          :currentTabs="currentTabs"
+        <OptionContent @mlAlgoData="mlAlgoData" @lastTab="lastTab" :currentTabs="currentTabs"
           :currentAlgoData="currentAlgoData"></OptionContent>
       </q-card>
     </q-dialog>
   </q-page-sticky>
-
 </template>
 
 <script>
@@ -109,12 +76,15 @@ export default {
     const currentTabs = {
       mainTab: 'clustering',
       clusteringTab: 'kmeans',
-      classificationTab: 'svm'
+      classificationTab: 'svm',
+      regressionTab: 'linear'
     }
     const progress = ref(false)
     const currentAlgoData = ref({})
-    const disableBtn = ref(true)
+    const disableBtn = ref(false)
+    const disableVBtn = ref(false)
     const classification = ['Decision Tree', 'Nearest Neighbors', 'SVM']
+    const regression = ['Regression Tree', 'Linear Regression']
 
     watchEffect(() => {
       if (Object.entries(currentAlgoData.value).length > 0) {
@@ -122,16 +92,33 @@ export default {
         const algoName = currentAlgoData.value.mlAlgoName
         if (c !== undefined) {
           disableBtn.value = $store.state.vizcanvas.points.length < c
-        }
-        if (checkMlAlgoName(algoName)) {
+          disableVBtn.value = disableBtn.value
+        } else if (checkMlAlgoName(algoName)) {
           disableBtn.value = !checkClasses()
+          disableVBtn.value = disableBtn.value
+        } else if (regressionAlg(algoName)) {
+          disableVBtn.value = true
+          if ($store.state.vizcanvas.points.length < 2) {
+            disableBtn.value = true
+          } else {
+            disableBtn.value = false
+          }
         }
       }
-
       if ($store.state.toolbar.clearCanvas) {
         clickedButtons.value.voronoi = false
       }
     })
+
+    function regressionAlg (name) {
+      let result = false
+      regression.forEach(el => {
+        if (el === name) {
+          result = true
+        }
+      })
+      return result
+    }
 
     function checkMlAlgoName (name) {
       let yes = false
@@ -231,13 +218,12 @@ export default {
       request,
       clickedButtons,
       prompt: ref(false),
-      disableBtn
+      disableBtn,
+      disableVBtn
 
     }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
