@@ -1,14 +1,14 @@
 import numpy as np
 from sklearn.tree import DecisionTreeRegressor
-from ..npHelper import np_array_to_list, get_x_and_y_arrays
+from ..npHelper import np_array_to_list, get_x_and_y_arrays, get_prediction_points
 
 
 def regressiontree(data):
     depth = data['mlAlgoOptions']['Depth']
     x, train_y = get_x_and_y_arrays(data['points'])
-    predict_x, predict_y = get_x_and_y_arrays(data['predictionData'])
     train_x = x.reshape(-1, 1)
-    predict_x = predict_x.reshape(-1, 1)
+    pred_x = get_prediction_points(x, -1)
+    predict_x = pred_x.reshape(-1, 1)
 
     # Fit regression model
     lm = DecisionTreeRegressor(max_depth=depth)
@@ -16,11 +16,11 @@ def regressiontree(data):
 
     # Predict
     y_pred = np_array_to_list(np.asarray(lm.predict(train_x), dtype = 'int'))
-    predicted_y = np_array_to_list(np.asarray(lm.predict(predict_x), dtype = 'int'))
+    predict_y = np_array_to_list(np.asarray(lm.predict(predict_x), dtype = 'int'))
 
-    xyResult = (np.asarray(x).tolist(),y_pred)
+    result = (np.asarray(pred_x).tolist(),predict_y)
 
 
     return { "specific" : "Regression Tree",
-             "labels": xyResult,
-             "prediction": predicted_y }
+             "labels": result,
+             "prediction": '' }

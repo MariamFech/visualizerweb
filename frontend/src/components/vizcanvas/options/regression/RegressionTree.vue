@@ -4,7 +4,7 @@
       <span class="text-blue-grey-14">
         Depth: {{ depth }}
       </span>
-      <q-slider v-model="depth" :min="1" :max="10" :step="1" @change="emitMlAlgoData()" label color="blue-grey-14" />
+      <q-slider v-model="depth" :min="1" :max="15" :step="1" @change="emitMlAlgoData()" label color="blue-grey-14" />
     </div>
 
   </div>

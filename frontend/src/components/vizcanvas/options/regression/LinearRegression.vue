@@ -4,7 +4,7 @@
       <span class="text-blue-grey-14">
         Polynom Degree: {{ degree }}
       </span>
-      <q-slider v-model="degree" :min="1" :max="5" :step="1" @update:modelValue="emitMlAlgoData()" label
+      <q-slider v-model="degree" :min="1" :max="15" :step="1" @update:modelValue="emitMlAlgoData()" label
         color="blue-grey-14" />
     </div>
 
