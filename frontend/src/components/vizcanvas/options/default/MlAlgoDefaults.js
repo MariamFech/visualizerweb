@@ -46,7 +46,8 @@ export function regressionTree () {
   return {
     mlAlgoName: 'Regression Tree',
     mlAlgoOptions: {
-      Depth: 1
+      Depth: 1,
+      Samples: 1
     }
   }
 }

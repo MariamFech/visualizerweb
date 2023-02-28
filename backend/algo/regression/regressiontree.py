@@ -5,13 +5,14 @@ from ..npHelper import np_array_to_list, get_x_and_y_arrays, get_prediction_poin
 
 def regressiontree(data):
     depth = data['mlAlgoOptions']['Depth']
+    samples = data['mlAlgoOptions']['Samples']
     x, train_y = get_x_and_y_arrays(data['points'])
     train_x = x.reshape(-1, 1)
     pred_x = get_prediction_points(x, -1)
     predict_x = pred_x.reshape(-1, 1)
 
     # Fit regression model
-    lm = DecisionTreeRegressor(max_depth=depth)
+    lm = DecisionTreeRegressor(max_depth=depth, min_samples_leaf=samples)
     lm.fit(train_x, train_y)
 
     # Predict

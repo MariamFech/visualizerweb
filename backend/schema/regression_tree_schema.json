@@ -16,13 +16,19 @@
         "mlAlgoOptions": {
             "type": "object",
             "required": [
-                "Depth"
+                "Depth",
+                "Samples"
             ],
             "properties": {
                 "Depth": {
                     "default": 2,
                     "minimum": 1,
                     "maximum": 20
+                },
+                "Samples": {
+                    "default": 1,
+                    "minimum": 1,
+                    "maximum": 10
                 }
             }
         },
